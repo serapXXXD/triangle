@@ -1,4 +1,4 @@
-FROM python:3.12
+FROM huecker.io/library/python:3.12
 
 RUN mkdir /code
 
