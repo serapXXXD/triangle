@@ -1,4 +1,4 @@
-FROM node:18
+FROM huecker.io/library/node:18
 
 WORKDIR /code
 
