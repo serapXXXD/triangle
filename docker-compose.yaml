@@ -48,7 +48,29 @@ services:
       - backend
       - frontend
 
+  rabbitmq:
+    image: huecker.io/library/rabbitmq:3-management
+    container_name: rabbitmq
+    hostname: 'rabbitmq'
+    ports:
+      - "5672:5672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/mnesia/
+      - ./rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+    restart: always
+
+
+  redis:
+    image: huecker.io/library/redis:latest
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/data
+
 volumes:
   postgres_volume:
   static_volume:
   media_volume:
+  redis:
+    driver: local
