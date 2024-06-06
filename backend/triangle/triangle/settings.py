@@ -26,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-oth27-01y1z(849)i#8^)54a=k6l34%-s(ixa+g#555cc31f9c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEDEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = os.environ.get(
     'ALLOWED_HOSTS', default='127.0.0.1,localhost').split(',')
@@ -40,11 +40,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_beat',
+    'django_celery_results',
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
     'drf_yasg',
     'api.apps.ApiConfig',
+
 ]
 
 MIDDLEWARE = [
@@ -142,4 +145,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CELERY_BROKER_URL = 'amqp://myuser:mypassword@localhost:5672/myvhost'
+MY_USER = os.environ.get('RABBITMQ_USER', default='guest')
+MY_PASSWORD = os.environ.get('RABBITMQ_PASSWORD', default='guest')
+MY_VHOST = os.environ.get('RABBITMQ_VHOST', default='vhost')
+MY_HOST = os.environ.get('RABBITMQ_HOST', default='localhost')
+
+CELERY_BROKER_URL = f'amqp://{MY_USER}:{MY_PASSWORD}@{MY_HOST}:5672/{MY_VHOST}'
+
+CELERY_RESULT_BACKEND = 'django-db'  # для сохранения результата в БД celery_results
